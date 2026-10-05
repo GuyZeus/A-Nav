@@ -1,0 +1,121 @@
+{
+  "src": "http://127.0.0.1:8000/index.html",
+  "url": "http://127.0.0.1:8000/index.html",
+  "outdir": "D:\\practice\\web\\A-Nav\\_shots",
+  "include": [
+    "lint",
+    "screenshots",
+    "structure"
+  ],
+  "shots": {
+    "desktop": {
+      "screenshot": "D:\\practice\\web\\A-Nav\\_shots\\127_0_0_1_desktop.jpg",
+      "screenshotBytes": 40670,
+      "truncated": false,
+      "structure": {
+        "title": "GuyZeus导航",
+        "firstH1": "GuyZeus导航",
+        "viewport": {
+          "w": 1440,
+          "h": 900
+        },
+        "fullpage": {
+          "w": 1440,
+          "h": 1389
+        },
+        "counts": {
+          "section": 7,
+          "h1": 1,
+          "h2": 7,
+          "img": 26,
+          "canvas": 0,
+          "svg": 2,
+          "links": 33,
+          "buttons": 1
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "extremeAspectImagesWarning": [
+        {
+          "natural": "1060x200",
+          "aspect": 5.3,
+          "shape": "too-wide",
+          "renderedBox": "40x40",
+          "objectFit": "contain",
+          "alt": "Kimi",
+          "src": "http://127.0.0.1:8000/icon/kimi.svg"
+        }
+      ],
+      "extremeAspectImagesHint": "含义：图片**素材本身**的宽高比过于极端，超出了 3:4 ~ 21:9（竖版到宽条形）这个能正常排版的区间。shape=too-tall 是窄竖条（如 1:5、9:16），too-wide 是长横条（如 3:1）。放进常规容器只有两种结果：`cover` 裁掉大部分主体，或 `contain` 在两侧/上下留出大片空白——**换个端也一样不好看**，不是响应式能救的。 | 与 stretchedImages 的区别：那条查「页面把图拉变形了」，这条查「素材比例本身不适合排版」，图片没被拉伸也会命中，两条互不重叠。 | 修法：重新生成这张图，在生图 prompt 里指定 3:4 ~ 21:9 之间的比例（Banner / Hero 用 16:9 或 21:9，章节题图用 3:2，方形插图用 1:1）。只调 CSS 没有用——固有比例不变，裁切和留白的取舍还在。 | 豁免（本项是 warning，不是必改）：(1) **用户自己提供的素材不要动**——SKILL 规定用户素材第一优先、不得擅自替换，本规则分不清图是生成的还是用户给的，命中用户素材时忽略即可；(2) 手机 UI 设计稿、竖版海报、二维码长图等媒介本身就要求极端比例的，对着截图确认是设计意图后忽略；(3) **检索来的真实产品图**（球拍、手机、瓶装商品这类本身就竖长的实物）不要重新生成——SKILL 规定忠实呈现真实产品要用检索，生成图会失真造假。这种情况改容器不改图：给它一个匹配的竖向容器，或用 `contain` + 收窄容器宽度，避免两侧大片留白；(4) 最小边 < 40px 的分隔线、纹理条、渐变边不报。",
+      "slopFontsWarning": [
+        {
+          "family": "arial",
+          "elementCount": 1,
+          "sampleText": "搜索"
+        }
+      ],
+      "slopFontsHint": "warning · 含义：页面使用了 skill 明确禁的 slop 高发字体（Inter / Roboto / Arial / Fraunces / Playfair）。elementCount 是命中该字体的元素数（不含 fallback），sampleText 是首个样例文字。 | 修法：换成主题相关的字体族（衬线/无衬线/等宽视调性而定），走自托管镜像 miaoda.feishu.cn/fonts/css2。 | 豁免：(1) **用户品牌指定使用**——例如客户 CI 明确要求 Inter/Roboto，写在 brief 里可忽略；(2) **系统字体 fallback 命中**——虽然本规则只取 fontFamily 首选族，但如果这个族本身写的是 \"Arial\"、可能只是保守 fallback；如果同一元素明显还挂了自定义字体但 fallback 落到 Arial（例如自定义字体 404 了），修的其实是字体加载而非字体选型；(3) 极简项目本就要 \"grotesque + 中性感\"，且用户未指定——罕见但存在，看截图和 design plan 确认后可豁免。",
+      "reportSource": "cdp"
+    },
+    "mobile": {
+      "screenshot": "D:\\practice\\web\\A-Nav\\_shots\\127_0_0_1_mobile.jpg",
+      "screenshotBytes": 62157,
+      "truncated": false,
+      "structure": {
+        "title": "GuyZeus导航",
+        "firstH1": "GuyZeus导航",
+        "viewport": {
+          "w": 390,
+          "h": 844
+        },
+        "fullpage": {
+          "w": 390,
+          "h": 1760
+        },
+        "counts": {
+          "section": 7,
+          "h1": 1,
+          "h2": 7,
+          "img": 26,
+          "canvas": 0,
+          "svg": 2,
+          "links": 33,
+          "buttons": 1
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "horizontalOverflow": [],
+      "resourceErrors": [],
+      "extremeAspectImagesWarning": [
+        {
+          "natural": "1060x200",
+          "aspect": 5.3,
+          "shape": "too-wide",
+          "renderedBox": "40x40",
+          "objectFit": "contain",
+          "alt": "Kimi",
+          "src": "http://127.0.0.1:8000/icon/kimi.svg"
+        }
+      ],
+      "extremeAspectImagesHint": "含义：图片**素材本身**的宽高比过于极端，超出了 3:4 ~ 21:9（竖版到宽条形）这个能正常排版的区间。shape=too-tall 是窄竖条（如 1:5、9:16），too-wide 是长横条（如 3:1）。放进常规容器只有两种结果：`cover` 裁掉大部分主体，或 `contain` 在两侧/上下留出大片空白——**换个端也一样不好看**，不是响应式能救的。 | 与 stretchedImages 的区别：那条查「页面把图拉变形了」，这条查「素材比例本身不适合排版」，图片没被拉伸也会命中，两条互不重叠。 | 修法：重新生成这张图，在生图 prompt 里指定 3:4 ~ 21:9 之间的比例（Banner / Hero 用 16:9 或 21:9，章节题图用 3:2，方形插图用 1:1）。只调 CSS 没有用——固有比例不变，裁切和留白的取舍还在。 | 豁免（本项是 warning，不是必改）：(1) **用户自己提供的素材不要动**——SKILL 规定用户素材第一优先、不得擅自替换，本规则分不清图是生成的还是用户给的，命中用户素材时忽略即可；(2) 手机 UI 设计稿、竖版海报、二维码长图等媒介本身就要求极端比例的，对着截图确认是设计意图后忽略；(3) **检索来的真实产品图**（球拍、手机、瓶装商品这类本身就竖长的实物）不要重新生成——SKILL 规定忠实呈现真实产品要用检索，生成图会失真造假。这种情况改容器不改图：给它一个匹配的竖向容器，或用 `contain` + 收窄容器宽度，避免两侧大片留白；(4) 最小边 < 40px 的分隔线、纹理条、渐变边不报。",
+      "slopFontsWarning": [
+        {
+          "family": "arial",
+          "elementCount": 1,
+          "sampleText": "搜索"
+        }
+      ],
+      "slopFontsHint": "warning · 含义：页面使用了 skill 明确禁的 slop 高发字体（Inter / Roboto / Arial / Fraunces / Playfair）。elementCount 是命中该字体的元素数（不含 fallback），sampleText 是首个样例文字。 | 修法：换成主题相关的字体族（衬线/无衬线/等宽视调性而定），走自托管镜像 miaoda.feishu.cn/fonts/css2。 | 豁免：(1) **用户品牌指定使用**——例如客户 CI 明确要求 Inter/Roboto，写在 brief 里可忽略；(2) **系统字体 fallback 命中**——虽然本规则只取 fontFamily 首选族，但如果这个族本身写的是 \"Arial\"、可能只是保守 fallback；如果同一元素明显还挂了自定义字体但 fallback 落到 Arial（例如自定义字体 404 了），修的其实是字体加载而非字体选型；(3) 极简项目本就要 \"grotesque + 中性感\"，且用户未指定——罕见但存在，看截图和 design plan 确认后可豁免。",
+      "reportSource": "cdp"
+    }
+  },
+  "engine": "chrome_cli",
+  "chromiumExec": "C:\\Users\\GuyZeus/AppData/Local/ms-playwright\\chromium_headless_shell-1228\\chrome-headless-shell-win64\\chrome-headless-shell.exe",
+  "engineDegraded": true,
+  "engineDegradedReason": "playwright 未装",
+  "elapsedSec": 6.27
+}

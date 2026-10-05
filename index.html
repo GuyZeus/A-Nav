@@ -4,156 +4,400 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GuyZeus导航</title>
+    <meta name="description" content="GuyZeus 的个人导航首页：搜索、学习、娱乐、购物与常用工具入口。">
     <!-- 适配A-Nav子站点的图标标签 -->
-        <base href="/A-Nav/">
-        
+    <base href="/A-Nav/">
+    <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%230e7c6b"/><path d="M22 10l-4.6 9.2-2.3-4.6L6 12.4z" fill="%23ffffff"/></svg>'>
     <style>
-        #time {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            display: block;
-            text-align: center;
-            height: 2em;
-            margin-top: 20px;
-            color: #333;
+        /* ===== 设计变量（ADHD 友好：高对比、单一强调色、低噪音） ===== */
+        :root {
+            --bg: #f4f6f8;
+            --surface: #ffffff;
+            --ink: #20262e;
+            --muted: #68717e;
+            --line: #e2e7ed;
+            --accent: #0e7c6b;
+            --accent-soft: #e3f3ef;
+            --accent-ink: #0a5d50;
+            --shadow: 0 6px 18px rgba(32, 38, 46, 0.08);
+            --radius: 14px;
+            --header-h: 56px;
         }
-        .search-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            width: 100%;
-            height: 40px;
-        }
-        .search-input {
-            width: 300px;
-            padding: 5px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px 0 0 4px;
-            outline: none;
-        }
-        .search-button {
-            padding: 5px 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-left: none;
-            border-radius: 0 4px 4px 0;
-            background-color: #f8f8f8;
-            cursor: pointer;
-        }
-        a {
-            display: inline-block;
-            margin: 5px;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: #333;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        a:hover {
-            background-color: #f0f0f0;
-            color: #000;
-        }
-        img {
-            vertical-align: middle;
-            margin-left: 5px;
-            width: 50px;
-            height: 50px;
-        }
-        
 
-      
-  
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+                "Noto Sans CJK SC", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ===== 顶栏：品牌 + 当前时间（状态始终可见） ===== */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: var(--header-h);
+            padding: 0 20px;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--ink);
+        }
+
+        .brand svg { color: var(--accent); flex: none; }
+
+        .clock {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted);
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+
+        /* ===== 主区域 ===== */
+        .wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+        }
+
+        /* 搜索框：页面上唯一首要动作，置顶且醒目 */
+        .search-box {
+            max-width: 640px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface);
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            padding: 0 8px 0 16px;
+            height: 50px;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(14, 124, 107, 0.16);
+        }
+
+        .search-box svg { color: var(--muted); flex: none; }
+
+        .search-box input {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            border: 0;
+            outline: none;
+            background: transparent;
+            font-size: 15px;
+            color: var(--ink);
+        }
+
+        .search-box input::placeholder { color: var(--muted); }
+
+        .search-box kbd {
+            font-family: inherit;
+            font-size: 11px;
+            color: var(--muted);
+            border: 1px solid var(--line);
+            border-bottom-width: 2px;
+            border-radius: 5px;
+            padding: 2px 6px;
+            background: var(--bg);
+            flex: none;
+        }
+
+        .search-btn {
+            height: 36px;
+            padding: 0 18px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: none;
+            transition: background-color 0.15s ease;
+        }
+
+        .search-btn:hover { background: var(--accent-ink); }
+        .search-btn:active { transform: translateY(1px); }
+
+        /* 快捷跳转条：一步跳到目标分组，减少滚动寻找 */
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin: 0 0 30px;
+        }
+
+        .chips a {
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--muted);
+            border: 1px solid var(--line);
+            background: var(--surface);
+            border-radius: 999px;
+            padding: 5px 12px;
+            transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+        }
+
+        .chips a:hover {
+            color: var(--accent-ink);
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        /* ===== 分组 ===== */
+        section.group { margin: 0 0 30px; scroll-margin-top: calc(var(--header-h) + 12px); }
+
+        .group h2 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 12px;
+            font-size: 15px;
+            font-weight: 650;
+            color: var(--ink);
+        }
+
+        .group h2::before {
+            content: "";
+            width: 4px;
+            height: 16px;
+            border-radius: 2px;
+            background: var(--accent);
+            flex: none;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+            gap: 10px;
+        }
+
+        .tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 92px;
+            padding: 12px 8px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            text-align: center;
+            transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .tile img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            flex: none;
+        }
+
+        .tile span {
+            font-size: 12.5px;
+            line-height: 1.35;
+            color: var(--ink);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-all;
+        }
+
+        .tile:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .tile:hover span { color: var(--accent-ink); }
+
+        /* ===== 页脚 ===== */
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 18px 20px 26px;
+            text-align: center;
+            font-size: 12.5px;
+            color: var(--muted);
+        }
+
+        /* ===== 键盘焦点可见（无障碍） ===== */
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+            border-radius: 6px;
+        }
+
+        /* ===== 减少动效偏好 ===== */
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            * { transition: none !important; }
+        }
+
+        /* ===== 移动端 ===== */
+        @media (max-width: 600px) {
+            .topbar { padding: 0 14px; }
+            .brand { font-size: 16px; }
+            .clock { font-size: 14px; }
+            .wrap { padding: 20px 14px 32px; }
+            .grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            /* 恰好 4 个卡片的组走 2 列，避免 3+1 孤卡 */
+            .grid:has(> :nth-child(4):last-child) { grid-template-columns: repeat(2, 1fr); }
+            .tile { min-height: 88px; padding: 10px 6px; }
+            .tile img { width: 40px; height: 40px; }
+            .tile span { font-size: 14px; }
+            .search-box { height: 48px; padding-left: 12px; }
+            .search-box input { font-size: 16px; } /* 避免 iOS 聚焦自动缩放 */
+            .search-btn { min-height: 44px; padding: 0 14px; }
+            .chips { margin-bottom: 24px; }
+            .chips a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 6px 14px; }
+            footer { font-size: 14px; }
+            section.group { margin-bottom: 24px; }
+        }
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">GuyZeus导航</h1>
-   
-    <div id="time"></div>
-    <!-- 百度搜索（可在Edge设置为默认） -->
-    <form action="https://cn.bing.com/search" method="get" class="search-container" target="_blank">
-        <input type="search" name="q" placeholder="必应搜索" class="search-input">
-        <button class="search-button">搜索</button>
-    </form>
 
+    <header class="topbar">
+        <h1 class="brand">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M15.8 8.2 13.2 13.2 8.2 15.8 10.8 10.8z"></path>
+            </svg>
+            GuyZeus导航
+        </h1>
+        <div class="clock" id="time" aria-label="当前时间"></div>
+    </header>
 
+    <main class="wrap">
 
+        <!-- 首要动作：搜索 -->
+        <form action="https://cn.bing.com/search" method="get" target="_blank" class="search-box" role="search">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5"></path>
+            </svg>
+            <input type="search" name="q" placeholder="必应搜索" aria-label="必应搜索">
+            <kbd>/</kbd>
+            <button type="submit" class="search-btn">搜索</button>
+        </form>
 
+        <!-- 快捷跳转 -->
+        <nav class="chips" aria-label="快捷跳转分组">
+            <a href="#sec-study">学习</a>
+            <a href="#sec-social">娱乐</a>
+            <a href="#sec-shop">购物</a>
+            <a href="#sec-ai">AI</a>
+            <a href="#sec-travel">出行</a>
+            <a href="#sec-tech">硬件</a>
+            <a href="#sec-other">其他</a>
+        </nav>
 
-    <h2 class="nav-title">校园学习</h2>
-    <div class="content-wrap" data-group="study">
-        <a href="https://i.chaoxing.com" target="_blank"> <img src="/icon/超星学习通.svg" alt="学习通"> <br>学习通 </a>
-        <a href="https://www.chsi.com.cn/" target="_blank"> <img src="/icon/学信网.svg" alt="学信网"> <br>学信网 </a>
-        <a href="https://yz.chsi.com.cn/" target="_blank"> <img src="/icon/研招网.svg" alt="研招网"> <br>研招网 </a>
-        <a href="http://cet-bm.neea.edu.cn/" target="_blank"> <img src="/icon/四六级.svg" alt="四六级考试"> <br>四六级考试 </a>
-        <a href="https://www.icourse163.org/" target="_blank"> <img src="/icon/中国大学MOOC.svg" alt="中国大学MOOC"> <br>MOOC </a>
-        <a href="https://www.scc.edu.cn/" target="_blank"> <img src="/icon/学校官网.svg" alt="学校官网"> <br>苏百官网 </a>
-        <a href="https://mail.qq.com/" target="_blank"> <img src="/icon/QQ邮箱.svg" alt="QQ邮箱"> <br>QQ邮箱 </a>
-        <a href="https://mitu.chandao.net/" target="_blank"> <img src="/icon/mitu.svg" alt="禅道测试"> <br>禅道 </a>
-    </div>
+        <section class="group" id="sec-study" aria-labelledby="h-study">
+            <h2 id="h-study">校园学习</h2>
+            <div class="grid">
+                <a class="tile" href="https://i.chaoxing.com" target="_blank" rel="noopener"><img src="/icon/超星学习通.svg" alt="学习通"><span>学习通</span></a>
+                <a class="tile" href="https://www.chsi.com.cn/" target="_blank" rel="noopener"><img src="/icon/学信网.svg" alt="学信网"><span>学信网</span></a>
+                <a class="tile" href="https://yz.chsi.com.cn/" target="_blank" rel="noopener"><img src="/icon/研招网.svg" alt="研招网"><span>研招网</span></a>
+                <a class="tile" href="http://cet-bm.neea.edu.cn/" target="_blank" rel="noopener"><img src="/icon/四六级.svg" alt="四六级考试"><span>四六级考试</span></a>
+                <a class="tile" href="https://www.icourse163.org/" target="_blank" rel="noopener"><img src="/icon/中国大学MOOC.svg" alt="中国大学MOOC"><span>中国大学MOOC</span></a>
+                <a class="tile" href="https://www.scc.edu.cn/" target="_blank" rel="noopener"><img src="/icon/学校官网.svg" alt="学校官网"><span>苏百官网</span></a>
+                <a class="tile" href="https://mail.qq.com/" target="_blank" rel="noopener"><img src="/icon/QQ邮箱.svg" alt="QQ邮箱"><span>QQ邮箱</span></a>
+                <a class="tile" href="https://mitu.chandao.net/" target="_blank" rel="noopener"><img src="/icon/mitu.svg" alt="禅道测试"><span>禅道</span></a>
+            </div>
+        </section>
 
-    <h2 class="nav-title">娱乐社交</h2>
-    <div class="content-wrap" data-group="social">
-        <a href="https://www.douyin.com" target="_blank"> <img src="/icon/抖音.svg" alt="抖音"> <br>抖音 </a>
-        <a href="https://www.bilibili.com" target="_blank"> <img src="/icon/哔哩哔哩.svg" alt="哔哩哔哩"> <br>哔哩哔哩 </a>
-        <a href="https://www.zhihu.com" target="_blank"> <img src="/icon/知乎.svg" alt="知乎"> <br>知乎 </a>
-        <a href="https://www.weibo.com" target="_blank"> <img src="/icon/微博.svg" alt="微博"> <br>微博 </a>
-    </div>
+        <section class="group" id="sec-social" aria-labelledby="h-social">
+            <h2 id="h-social">娱乐社交</h2>
+            <div class="grid">
+                <a class="tile" href="https://www.douyin.com" target="_blank" rel="noopener"><img src="/icon/抖音.svg" alt="抖音"><span>抖音</span></a>
+                <a class="tile" href="https://www.bilibili.com" target="_blank" rel="noopener"><img src="/icon/哔哩哔哩.svg" alt="哔哩哔哩"><span>哔哩哔哩</span></a>
+                <a class="tile" href="https://www.zhihu.com" target="_blank" rel="noopener"><img src="/icon/知乎.svg" alt="知乎"><span>知乎</span></a>
+                <a class="tile" href="https://www.weibo.com" target="_blank" rel="noopener"><img src="/icon/微博.svg" alt="微博"><span>微博</span></a>
+            </div>
+        </section>
 
-    <h2 class="nav-title">购物平台</h2>
-    <div class="content-wrap" data-group="shop">
-        <a href="https://www.taobao.com" target="_blank"> <img src="/icon/淘宝.svg" alt="淘宝"> <br>淘宝 </a>
-        <a href="https://www.jd.com" target="_blank"> <img src="/icon/京东.svg" alt="京东"> <br>京东 </a>
-        <a href="https://www.tmall.com" target="_blank"> <img src="/icon/天猫.svg" alt="天猫"> <br>天猫 </a>
-    </div>
+        <section class="group" id="sec-shop" aria-labelledby="h-shop">
+            <h2 id="h-shop">购物平台</h2>
+            <div class="grid">
+                <a class="tile" href="https://www.taobao.com" target="_blank" rel="noopener"><img src="/icon/淘宝.svg" alt="淘宝"><span>淘宝</span></a>
+                <a class="tile" href="https://www.jd.com" target="_blank" rel="noopener"><img src="/icon/京东.svg" alt="京东"><span>京东</span></a>
+                <a class="tile" href="https://www.tmall.com" target="_blank" rel="noopener"><img src="/icon/天猫.svg" alt="天猫"><span>天猫</span></a>
+            </div>
+        </section>
 
-    <h2 class="nav-title">AI工具</h2>
-    <div class="content-wrap" data-group="ai">
-        <a href="https://www.doubao.com" target="_blank"> <img src="/icon/豆包.svg" alt="豆包"> <br>豆包 </a>
-        <a href="https://kimi.moonshot.cn" target="_blank"> <img src="/icon/kimi.svg" alt="Kimi"> <br>Kimi </a>
-        <a href="https://chat.deepseek.com/" target="_blank"> <img src="/icon/deepseek.svg" alt="DeepSeek"> <br>DeepSeek </a>
-    </div>
+        <section class="group" id="sec-ai" aria-labelledby="h-ai">
+            <h2 id="h-ai">AI工具</h2>
+            <div class="grid">
+                <a class="tile" href="https://www.doubao.com" target="_blank" rel="noopener"><img src="/icon/豆包.svg" alt="豆包"><span>豆包</span></a>
+                <a class="tile" href="https://kimi.moonshot.cn" target="_blank" rel="noopener"><img src="/icon/kimi.svg" alt="Kimi"><span>Kimi</span></a>
+                <a class="tile" href="https://chat.deepseek.com/" target="_blank" rel="noopener"><img src="/icon/deepseek.svg" alt="DeepSeek"><span>DeepSeek</span></a>
+            </div>
+        </section>
 
-    <h2 class="nav-title">出行生活</h2>
-    <div class="content-wrap" data-group="travel">
-        <a href="https://www.12306.cn/index/" target="_blank"> <img src="/icon/12306.svg" alt="12306"> <br>12306 </a>
-        <a href="https://www.ctrip.com/" target="_blank"> <img src="/icon/携程.svg" alt="携程"> <br>携程 </a>
-    </div>
+        <section class="group" id="sec-travel" aria-labelledby="h-travel">
+            <h2 id="h-travel">出行生活</h2>
+            <div class="grid">
+                <a class="tile" href="https://www.12306.cn/index/" target="_blank" rel="noopener"><img src="/icon/12306.svg" alt="12306"><span>12306</span></a>
+                <a class="tile" href="https://www.ctrip.com/" target="_blank" rel="noopener"><img src="/icon/携程.svg" alt="携程"><span>携程</span></a>
+            </div>
+        </section>
 
-    <h2 class="nav-title">硬件/技术</h2>
-    <div class="content-wrap" data-group="tech">
-        <a href="https://zhuangit.ababtools.com/" target="_blank"> <img src="/icon/装个机.svg" alt="装个机"> <br>装个机 </a>
-        <a href="https://github.com/" target="_blank"> <img src="/icon/github.svg" alt="GitHub"> <br>GitHub </a>
-    </div>
+        <section class="group" id="sec-tech" aria-labelledby="h-tech">
+            <h2 id="h-tech">硬件/技术</h2>
+            <div class="grid">
+                <a class="tile" href="https://zhuangit.ababtools.com/" target="_blank" rel="noopener"><img src="/icon/装个机.svg" alt="装个机"><span>装个机</span></a>
+                <a class="tile" href="https://github.com/" target="_blank" rel="noopener"><img src="/icon/github.svg" alt="GitHub"><span>GitHub</span></a>
+            </div>
+        </section>
 
-    <h2 class="nav-title">其他工具</h2>
-    <div class="content-wrap" id="customSiteWrap" data-group="custom">
-        <a href="https://nav.guyzeus.top/" target="_blank"> <img src="/icon/导航.svg" alt=""> <br>导航 </a>
-        <a href="https://blog.guyzeus.top/" target="_blank"> <img src="/icon/博客.svg" alt=""> <br>博客 </a>
-        <a href="https://www.timxy.com" target="_blank"> <img src="/icon/官网.svg" alt="官网"> <br>官网 </a>
-        <a href="https://video.timxy.com/" target="_blank"><img src="/icon/视频网站.svg" alt=""> <br>视频</a>
+        <section class="group" id="sec-other" aria-labelledby="h-other">
+            <h2 id="h-other">其他工具</h2>
+            <div class="grid">
+                <a class="tile" href="https://nav.guyzeus.top/" target="_blank" rel="noopener"><img src="/icon/导航.svg" alt="导航"><span>导航</span></a>
+                <a class="tile" href="https://blog.guyzeus.top/" target="_blank" rel="noopener"><img src="/icon/博客.svg" alt="博客"><span>博客</span></a>
+                <a class="tile" href="https://www.timxy.com" target="_blank" rel="noopener"><img src="/icon/官网.svg" alt="官网"><span>官网</span></a>
+                <a class="tile" href="https://video.timxy.com/" target="_blank" rel="noopener"><img src="/icon/视频网站.svg" alt="视频网站"><span>视频</span></a>
+            </div>
+        </section>
 
-    </div>
-    <hr>
+    </main>
+
     <footer>
-        <p style="text-align: center;">&copy; 2026 GuyZeus. All rights reserved.</p>
+        <p style="margin: 0;">&copy; 2026 GuyZeus. All rights reserved.</p>
     </footer>
 
-       
-
-
-
-
-
-
-
-
-
-
-
-
-     <script>
+    <script>
         const timeDisplay = document.getElementById('time');
 
         function getTime() {
@@ -170,7 +414,7 @@
             const secs = pad(date.getSeconds());
 
             // 星期数组
-            const weekArr = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+            const weekArr = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
             const week = weekArr[date.getDay()];
 
             timeDisplay.textContent = `${year}年${month}月${day}日 ${week} ${hours}:${mins}:${secs}`;
@@ -178,7 +422,15 @@
 
         getTime();
         setInterval(getTime, 1000);
+
+        // 按 "/" 快速聚焦搜索框（减少从手到鼠标的动作）
+        document.addEventListener('keydown', function (e) {
+            const t = e.target;
+            if (e.key === '/' && t.tagName !== 'INPUT' && t.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                document.querySelector('.search-box input').focus();
+            }
+        });
     </script>
-    
 </body>
 </html>
