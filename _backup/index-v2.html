@@ -5,57 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GuyZeus导航</title>
     <meta name="description" content="GuyZeus 的个人导航首页：搜索、学习、娱乐、购物与常用工具入口。">
-    <meta name="color-scheme" content="light dark">
-    <meta name="theme-color" content="#f2f5f7" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#14181d" media="(prefers-color-scheme: dark)">
-    <meta property="og:title" content="GuyZeus导航">
-    <meta property="og:description" content="GuyZeus 的个人导航首页：搜索、学习、娱乐、购物与常用工具入口。">
-    <meta property="og:type" content="website">
-    <!-- 相对路径图标：根路径与 /A-Nav/ 子路径部署均可用 -->
+    <!-- 相对路径图标：根路径与 /A-Nav/ 子路径部署均可用，不依赖 base 标签 -->
     <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%230e7c6b"/><path d="M22 10l-4.6 9.2-2.3-4.6L6 12.4z" fill="%23ffffff"/></svg>'>
-    <script>
-        /* 主题初始化：URL 参数 > 本地记忆 > 系统偏好，避免首屏闪烁 */
-        (function () {
-            var theme = new URLSearchParams(location.search).get('theme')
-                || localStorage.getItem('nav-theme')
-                || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            document.documentElement.setAttribute('data-theme', theme);
-        })();
-    </script>
     <style>
-        /* ===== 设计变量（ADHD 友好：高对比、单一强调色、低噪音；支持深色模式） ===== */
+        /* ===== 设计变量（ADHD 友好：高对比、单一强调色、低噪音） ===== */
         :root {
-            --bg: #f2f5f7;
+            --bg: #f4f6f8;
             --surface: #ffffff;
-            --ink: #1e242b;
-            --muted: #66707c;
-            --line: #e1e6ec;
+            --ink: #20262e;
+            --muted: #68717e;
+            --line: #e2e7ed;
             --accent: #0e7c6b;
-            --accent-soft: #e4f3ef;
+            --accent-soft: #e3f3ef;
             --accent-ink: #0a5d50;
-            --chip: #eef1f4;
-            --bar: rgba(255, 255, 255, 0.9);
-            --glow: rgba(14, 124, 107, 0.07);
-            --shadow: 0 6px 18px rgba(30, 36, 43, 0.08);
-            --shadow-lg: 0 10px 28px rgba(30, 36, 43, 0.12);
+            --shadow: 0 6px 18px rgba(32, 38, 46, 0.08);
             --radius: 14px;
             --header-h: 56px;
-        }
-
-        [data-theme="dark"] {
-            --bg: #14181d;
-            --surface: #1d232a;
-            --ink: #e6e9ec;
-            --muted: #9aa4ae;
-            --line: #2b333c;
-            --accent: #35b39c;
-            --accent-soft: #1e3a33;
-            --accent-ink: #7fd9c6;
-            --chip: #242c34;
-            --bar: rgba(20, 24, 29, 0.9);
-            --glow: rgba(53, 179, 156, 0.09);
-            --shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-            --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.5);
         }
 
         * { box-sizing: border-box; }
@@ -64,20 +29,17 @@
 
         body {
             margin: 0;
-            background:
-                radial-gradient(1100px 480px at 50% -120px, var(--glow), transparent 70%),
-                var(--bg);
+            background: var(--bg);
             color: var(--ink);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
                 "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
                 "Noto Sans CJK SC", sans-serif;
             -webkit-font-smoothing: antialiased;
-            transition: background-color 0.2s ease, color 0.2s ease;
         }
 
         a { color: inherit; text-decoration: none; }
 
-        /* ===== 顶栏：品牌 + 状态 + 主题切换 ===== */
+        /* ===== 顶栏：品牌 + 当前时间（状态始终可见） ===== */
         .topbar {
             position: sticky;
             top: 0;
@@ -85,11 +47,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
             height: var(--header-h);
             padding: 0 20px;
-            background: var(--bar);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(8px);
             border-bottom: 1px solid var(--line);
         }
@@ -107,12 +67,6 @@
 
         .brand svg { color: var(--accent); flex: none; }
 
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
         .clock {
             font-size: 13px;
             font-weight: 500;
@@ -121,55 +75,12 @@
             white-space: nowrap;
         }
 
-        .theme-btn {
-            width: 36px;
-            height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--line);
-            background: var(--surface);
-            border-radius: 10px;
-            color: var(--muted);
-            cursor: pointer;
-            transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
-        }
-
-        .theme-btn:hover { color: var(--accent-ink); border-color: var(--accent); }
-
-        .icon-sun { display: none; }
-        [data-theme="dark"] .icon-sun { display: block; }
-        [data-theme="dark"] .icon-moon { display: none; }
-
         /* ===== 主区域 ===== */
         .wrap {
             max-width: 1080px;
             margin: 0 auto;
-            padding: 26px 20px 40px;
+            padding: 28px 20px 40px;
         }
-
-        /* 搜索引擎切换 */
-        .engines {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            margin: 0 auto 10px;
-        }
-
-        .engines button {
-            font-size: 12.5px;
-            font-weight: 600;
-            color: var(--muted);
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: 999px;
-            padding: 6px 16px;
-            cursor: pointer;
-            transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
-        }
-
-        .engines button:hover { color: var(--accent-ink); border-color: var(--accent); }
-        .engines button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
 
         /* 搜索框：页面上唯一首要动作，置顶且醒目 */
         .search-box {
@@ -189,10 +100,6 @@
         .search-box:focus-within {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(14, 124, 107, 0.16);
-        }
-
-        [data-theme="dark"] .search-box:focus-within {
-            box-shadow: 0 0 0 3px rgba(53, 179, 156, 0.22);
         }
 
         .search-box svg { color: var(--muted); flex: none; }
@@ -274,7 +181,7 @@
             gap: 8px;
             margin: 0 0 12px;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 650;
             color: var(--ink);
         }
 
@@ -298,9 +205,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            min-height: 96px;
-            padding: 14px 8px;
+            gap: 8px;
+            min-height: 92px;
+            padding: 12px 8px;
             background: var(--surface);
             border: 1px solid var(--line);
             border-radius: var(--radius);
@@ -309,18 +216,14 @@
         }
 
         .tile img {
-            width: 46px;
-            height: 46px;
-            padding: 5px;
-            background: var(--chip);
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
             object-fit: contain;
             flex: none;
-            transition: background-color 0.15s ease;
         }
 
         .tile span {
-            font-size: 13px;
+            font-size: 12.5px;
             line-height: 1.35;
             color: var(--ink);
             display: -webkit-box;
@@ -333,10 +236,9 @@
         .tile:hover {
             border-color: var(--accent);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow);
         }
 
-        .tile:hover img { background: var(--accent-soft); }
         .tile:hover span { color: var(--accent-ink); }
 
         /* ===== 页脚 ===== */
@@ -368,16 +270,14 @@
             .clock { font-size: 14px; }
             .wrap { padding: 20px 14px 32px; }
             .grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-            /* 4 卡组与 7 卡组走 2 列，避免 3+1 孤卡（class="grid two"） */
-            .grid.two { grid-template-columns: repeat(2, 1fr); }
+            /* 恰好 4 个卡片的组走 2 列，避免 3+1 孤卡 */
+            .grid:has(> :nth-child(4):last-child) { grid-template-columns: repeat(2, 1fr); }
             .tile { min-height: 88px; padding: 10px 6px; }
-            .tile img { width: 42px; height: 42px; }
+            .tile img { width: 40px; height: 40px; }
             .tile span { font-size: 14px; }
             .search-box { height: 48px; padding-left: 12px; }
             .search-box input { font-size: 16px; } /* 避免 iOS 聚焦自动缩放 */
             .search-btn { min-height: 44px; padding: 0 14px; }
-            .engines button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 8px 16px; }
-            .theme-btn { width: 44px; height: 44px; }
             .chips { margin-bottom: 24px; }
             .chips a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 6px 14px; }
             footer { font-size: 14px; }
@@ -395,42 +295,31 @@
             </svg>
             GuyZeus导航
         </h1>
-        <div class="topbar-right">
-            <div class="clock" id="time" aria-label="当前时间"></div>
-            <button type="button" class="theme-btn" id="themeBtn" aria-label="切换深浅色主题" title="切换深浅色主题">
-                <svg class="icon-moon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
-                <svg class="icon-sun" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
-            </button>
-        </div>
+        <div class="clock" id="time" aria-label="当前时间"></div>
     </header>
 
     <main class="wrap">
 
-        <!-- 搜索引擎切换 -->
-        <div class="engines" role="group" aria-label="选择搜索引擎">
-            <button type="button" data-engine="bing" aria-pressed="true">必应</button>
-            <button type="button" data-engine="baidu" aria-pressed="false">百度</button>
-            <button type="button" data-engine="google" aria-pressed="false">Google</button>
-        </div>
-
         <!-- 首要动作：搜索 -->
-        <form id="searchForm" action="https://cn.bing.com/search" method="get" target="_blank" class="search-box" role="search">
+        <form action="https://cn.bing.com/search" method="get" target="_blank" class="search-box" role="search">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                 <circle cx="11" cy="11" r="7"></circle>
                 <path d="m20 20-3.5-3.5"></path>
             </svg>
-            <input type="search" id="searchInput" name="q" placeholder="必应搜索" aria-label="必应搜索">
+            <input type="search" name="q" placeholder="必应搜索" aria-label="必应搜索">
             <kbd>/</kbd>
             <button type="submit" class="search-btn">搜索</button>
         </form>
 
-        <!-- 快捷跳转（快捷键 1-5） -->
+        <!-- 快捷跳转 -->
         <nav class="chips" aria-label="快捷跳转分组">
-            <a href="#sec-study" title="快捷键 1">学习</a>
-            <a href="#sec-tech" title="快捷键 2">硬件</a>
-            <a href="#sec-social" title="快捷键 3">娱乐</a>
-            <a href="#sec-shop" title="快捷键 4">购物</a>
-            <a href="#sec-other" title="快捷键 5">其他</a>
+            <a href="#sec-study">学习</a>
+            <a href="#sec-social">娱乐</a>
+            <a href="#sec-shop">购物</a>
+            <a href="#sec-ai">AI</a>
+            <a href="#sec-travel">出行</a>
+            <a href="#sec-tech">硬件</a>
+            <a href="#sec-other">其他</a>
         </nav>
 
         <section class="group" id="sec-study" aria-labelledby="h-study">
@@ -442,17 +331,18 @@
                 <a class="tile" href="http://cet-bm.neea.edu.cn/" target="_blank" rel="noopener"><img src="icon/四六级.svg" alt="四六级考试"><span>四六级考试</span></a>
                 <a class="tile" href="https://www.icourse163.org/" target="_blank" rel="noopener"><img src="icon/中国大学MOOC.svg" alt="中国大学MOOC"><span>中国大学MOOC</span></a>
                 <a class="tile" href="https://www.scc.edu.cn/" target="_blank" rel="noopener"><img src="icon/学校官网.svg" alt="学校官网"><span>苏百官网</span></a>
+                
             </div>
         </section>
 
-        <section class="group" id="sec-tech" aria-labelledby="h-tech">
+         <section class="group" id="sec-tech" aria-labelledby="h-tech">
             <h2 id="h-tech">硬件/技术</h2>
-            <div class="grid two">
+            <div class="grid">
                 <a class="tile" href="https://zhuangit.ababtools.com/" target="_blank" rel="noopener"><img src="icon/装个机.svg" alt="装个机"><span>装个机</span></a>
                 <a class="tile" href="https://github.com/" target="_blank" rel="noopener"><img src="icon/github.svg" alt="GitHub"><span>GitHub</span></a>
                 <a class="tile" href="https://mail.qq.com/" target="_blank" rel="noopener"><img src="icon/QQ邮箱.svg" alt="QQ邮箱"><span>QQ邮箱</span></a>
                 <a class="tile" href="https://mitu.chandao.net/" target="_blank" rel="noopener"><img src="icon/mitu.svg" alt="禅道测试"><span>禅道</span></a>
-                <a class="tile" href="https://www.doubao.com" target="_blank" rel="noopener"><img src="icon/豆包.svg" alt="豆包"><span>豆包</span></a>
+             <a class="tile" href="https://www.doubao.com" target="_blank" rel="noopener"><img src="icon/豆包.svg" alt="豆包"><span>豆包</span></a>
                 <a class="tile" href="https://kimi.moonshot.cn" target="_blank" rel="noopener"><img src="icon/kimi.svg" alt="Kimi"><span>Kimi</span></a>
                 <a class="tile" href="https://chat.deepseek.com/" target="_blank" rel="noopener"><img src="icon/deepseek.svg" alt="DeepSeek"><span>DeepSeek</span></a>
             </div>
@@ -460,7 +350,7 @@
 
         <section class="group" id="sec-social" aria-labelledby="h-social">
             <h2 id="h-social">娱乐社交</h2>
-            <div class="grid two">
+            <div class="grid">
                 <a class="tile" href="https://www.douyin.com" target="_blank" rel="noopener"><img src="icon/抖音.svg" alt="抖音"><span>抖音</span></a>
                 <a class="tile" href="https://www.bilibili.com" target="_blank" rel="noopener"><img src="icon/哔哩哔哩.svg" alt="哔哩哔哩"><span>哔哩哔哩</span></a>
                 <a class="tile" href="https://www.zhihu.com" target="_blank" rel="noopener"><img src="icon/知乎.svg" alt="知乎"><span>知乎</span></a>
@@ -477,9 +367,15 @@
             </div>
         </section>
 
+        
+
+       
+
+       
+
         <section class="group" id="sec-other" aria-labelledby="h-other">
             <h2 id="h-other">其他工具</h2>
-            <div class="grid two">
+            <div class="grid">
                 <a class="tile" href="https://nav.guyzeus.top/" target="_blank" rel="noopener"><img src="icon/导航.svg" alt="导航"><span>导航</span></a>
                 <a class="tile" href="https://blog.guyzeus.top/" target="_blank" rel="noopener"><img src="icon/博客.svg" alt="博客"><span>博客</span></a>
                 <a class="tile" href="https://www.timxy.com" target="_blank" rel="noopener"><img src="icon/官网.svg" alt="官网"><span>官网</span></a>
@@ -494,85 +390,37 @@
     </footer>
 
     <script>
-        // ===== 当前时间（移动端用短格式，减少横向占用） =====
         const timeDisplay = document.getElementById('time');
-        const isMobile = () => matchMedia('(max-width: 600px)').matches;
-        const pad = num => num.toString().padStart(2, '0');
-        const fullWeek = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-        const shortWeek = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
         function getTime() {
             const date = new Date();
+            // 补零
+            const pad = num => num.toString().padStart(2, '0');
+
             const year = date.getFullYear();
-            const month = pad(date.getMonth() + 1);
+            const month = pad(date.getMonth() + 1); // 月份0-11 要+1
             const day = pad(date.getDate());
+
             const hours = pad(date.getHours());
             const mins = pad(date.getMinutes());
             const secs = pad(date.getSeconds());
-            if (isMobile()) {
-                timeDisplay.textContent = `${month}-${day} ${shortWeek[date.getDay()]} ${hours}:${mins}`;
-            } else {
-                timeDisplay.textContent = `${year}年${month}月${day}日 ${fullWeek[date.getDay()]} ${hours}:${mins}:${secs}`;
-            }
+
+            // 星期数组
+            const weekArr = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const week = weekArr[date.getDay()];
+
+            timeDisplay.textContent = `${year}年${month}月${day}日 ${week} ${hours}:${mins}:${secs}`;
         }
 
         getTime();
         setInterval(getTime, 1000);
 
-        // ===== 深浅色主题切换 =====
-        const themeBtn = document.getElementById('themeBtn');
-        themeBtn.addEventListener('click', function () {
-            const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('nav-theme', next);
-        });
-
-        // ===== 搜索引擎切换（记忆选择） =====
-        const ENGINES = {
-            bing:   { action: 'https://cn.bing.com/search',    name: 'q',  ph: '必应搜索' },
-            baidu:  { action: 'https://www.baidu.com/s',       name: 'wd', ph: '百度搜索' },
-            google: { action: 'https://www.google.com/search', name: 'q',  ph: 'Google 搜索' }
-        };
-        const searchForm = document.getElementById('searchForm');
-        const searchInput = document.getElementById('searchInput');
-        const engineBtns = document.querySelectorAll('.engines button');
-
-        function applyEngine(key) {
-            const cfg = ENGINES[key];
-            if (!cfg) return;
-            searchForm.action = cfg.action;
-            searchInput.name = cfg.name;
-            searchInput.placeholder = cfg.ph;
-            searchInput.setAttribute('aria-label', cfg.ph);
-            engineBtns.forEach(btn => {
-                btn.setAttribute('aria-pressed', btn.dataset.engine === key ? 'true' : 'false');
-            });
-        }
-
-        engineBtns.forEach(btn => {
-            btn.addEventListener('click', function () {
-                applyEngine(this.dataset.engine);
-                localStorage.setItem('nav-engine', this.dataset.engine);
-            });
-        });
-        applyEngine(localStorage.getItem('nav-engine') || 'bing');
-
-        // ===== 键盘快捷路径 =====
-        // "/" 聚焦搜索；Esc 清空并失焦；1-5 跳转对应分组
-        const SEC_IDS = ['study', 'tech', 'social', 'shop', 'other'];
+        // 按 "/" 快速聚焦搜索框（减少从手到鼠标的动作）
         document.addEventListener('keydown', function (e) {
             const t = e.target;
-            if (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA') {
-                if (e.key === 'Escape') { t.value = ''; t.blur(); }
-                return;
-            }
-            if (e.key === '/') {
+            if (e.key === '/' && t.tagName !== 'INPUT' && t.tagName !== 'TEXTAREA') {
                 e.preventDefault();
-                searchInput.focus();
-                return;
-            }
-            if (e.key >= '1' && e.key <= '5') {
-                location.hash = '#sec-' + SEC_IDS[e.key.charCodeAt(0) - 49];
+                document.querySelector('.search-box input').focus();
             }
         });
     </script>
